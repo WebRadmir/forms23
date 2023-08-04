@@ -1,0 +1,80 @@
+<div style="width: 300px; margin: auto; margin-top: 50px">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Имя</nz-form-label>
+      <nz-form-control [nzSm]="16" [nzXs]="24">
+        <input nz-input formControlName="firstName" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Фамилия</nz-form-label>
+      <nz-form-control [nzSm]="16" [nzXs]="24">
+        <input nz-input formControlName="lastName" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired
+        >Дата рождения</nz-form-label
+      >
+      <nz-form-control [nzSm]="16" [nzXs]="24">
+        <nz-date-picker formControlName="birthDate"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Email</nz-form-label>
+      <nz-form-control [nzSm]="16" [nzXs]="24">
+        <input nz-input formControlName="email" type="email" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Password</nz-form-label>
+      <nz-form-control
+        [nzSpan]="12"
+        nzDisableAutoTips
+        nzErrorTip="Please input your password!"
+      >
+        <input
+          nz-input
+          type="password"
+          formControlName="password"
+          (ngModelChange)="validateConfirmPassword()"
+        />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Confirm Password</nz-form-label>
+      <nz-form-control
+        [nzSpan]="12"
+        nzDisableAutoTips
+        [nzErrorTip]="passwordErrorTpl"
+      >
+        <input
+          nz-input
+          type="password"
+          formControlName="confirm"
+          placeholder="confirm your password"
+        />
+        <ng-template #passwordErrorTpl let-control>
+          <ng-container *ngIf="control.hasError('required')"
+            >Please confirm your password!</ng-container
+          >
+          <ng-container *ngIf="control.hasError('confirm')"
+            >Password is inconsistent!</ng-container
+          >
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzSpan]="16" [nzOffset]="8" [nzXs]="24">
+        <button nz-button nzType="primary" [disabled]="!registrationForm.valid">
+          Отправить
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</div>
