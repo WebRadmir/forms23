@@ -1,0 +1,160 @@
+<div class="container">
+  <ng-template #regForm>
+    <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+      <h1>Форма регистрации (18+)</h1>
+
+      <div class="form-control">
+        <label>Имя</label>
+        <input type="text" placeholder="Имя" formControlName="name" />
+        <div
+          *ngIf="form.get('name')?.invalid && form.get('name')?.touched"
+          class="validation"
+        >
+          <small *ngIf="form.get('name')?.errors?.['required']"
+            >Введите имя</small
+          >
+          <small *ngIf="form.get('name')?.errors?.['pattern']"
+            >Только русский и английский алфавит</small
+          >
+          <small *ngIf="form.get('name')?.errors?.['hasSpaces']"
+            >Не используйте пробелы</small
+          >
+          <small *ngIf="form.get('name')?.errors?.['maxlength']"
+            >Максимально количество символов -
+            {{form.get('name')?.errors?.['maxlength'].requiredLength}}<br />
+            Сейчас введено -
+            {{form.get('name')?.errors?.['maxlength'].actualLength}}</small
+          >
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Фамилия</label>
+        <input type="text" placeholder="Фамилия" formControlName="surname" />
+        <div
+          *ngIf="form.get('surname')?.invalid && form.get('surname')?.touched"
+          class="validation"
+        >
+          <small *ngIf="form.get('surname')?.errors?.['required']"
+            >Введите фамилию</small
+          >
+          <small *ngIf="form.get('surname')?.errors?.['pattern']"
+            >Только русский и английский алфавит</small
+          >
+          <small *ngIf="form.get('surname')?.errors?.['hasSpaces']"
+            >Не используйте пробелы</small
+          >
+          <small *ngIf="form.get('surname')?.errors?.['maxlength']"
+            >Максимально количество символов -
+            {{form.get('surname')?.errors?.['maxlength'].requiredLength}}<br />
+            Сейчас введено -
+            {{form.get('surname')?.errors?.['maxlength'].actualLength}}</small
+          >
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Email</label>
+        <input type="text" placeholder="Email" formControlName="email" />
+        <div
+          *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+          class="validation"
+        >
+          <small *ngIf="form.get('email')?.errors?.['required']"
+            >Введите email</small
+          >
+          <small *ngIf="form.get('email')?.errors?.['email']"
+            >Введите корректный email</small
+          >
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Пароль</label>
+        <input
+          type="password"
+          placeholder="Пароль"
+          formControlName="password"
+        />
+        <div
+          *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+          class="validation"
+        >
+          <small *ngIf="form.get('password')?.errors?.['required']"
+            >Введите пароль</small
+          >
+          <small *ngIf="form.get('password')?.errors?.['pattern']"
+            >Пароль должен содержать: строчную и заглавную буквы, цыфру,
+            символ.<br />
+            Допустимы буквы английского алфавита и символы !@#$%^&*()_+</small
+          >
+          <small *ngIf="form.get('password')?.errors?.['hasSpaces']"
+            >Не используйте пробелы</small
+          >
+          <small *ngIf="form.get('password')?.errors?.['minlength']"
+            >Минимальное количество символов -
+            {{form.get('password')?.errors?.['minlength'].requiredLength}}<br />
+            Сейчас введено -
+            {{form.get('password')?.errors?.['minlength'].actualLength}}</small
+          >
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Подтверждение пароля</label>
+        <input
+          type="password"
+          placeholder="Подтверждение пароля"
+          formControlName="confirmPassword"
+        />
+        <div
+          *ngIf="
+            form.get('confirmPassword')?.invalid &&
+            form.get('confirmPassword')?.touched
+          "
+          class="validation"
+        >
+          <small *ngIf="form.get('confirmPassword')?.errors?.['required']"
+            >Введите пароль</small
+          >
+          <small *ngIf="form.get('confirmPassword')?.errors?.['notConfirm']"
+            >Пароли не совпадают</small
+          >
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Дата рождения</label>
+        <input
+          type="date"
+          placeholder="Дата рождения"
+          formControlName="birthday"
+        />
+        <div
+          *ngIf="form.get('birthday')?.invalid && form.get('birthday')?.touched"
+          class="validation"
+        >
+          <small *ngIf="form.get('birthday')?.errors?.['required']"
+            >Выберите дату</small
+          >
+          <small
+            *ngIf="form.get('birthday')?.errors?.['required']==null && form.get('birthday')?.errors?.['underage']"
+            >Зайдите когда вам исполнится 18 ;)</small
+          >
+        </div>
+      </div>
+      <button class="btn" type="submit" [disabled]="form.invalid">
+        Отправить
+      </button>
+    </form>
+  </ng-template>
+  <p *ngIf="error" class="error">
+    Ошибка запроса. Обратитесь в поддержку
+    <a href="mailo:info@23devs.com">info@23devs.com</a><br />
+    <small>Ошибка {{ error }}</small>
+  </p>
+
+  <p *ngIf="success; else regForm" class="success">
+    Регистрация прошла успешно!
+  </p>
+</div>
