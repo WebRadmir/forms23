@@ -25,11 +25,7 @@ export class AppComponent implements OnInit {
         Validators.pattern(/^[a-zA-Zа-яА-Я]+$/),
         MyValidators.noSpaces,
       ]),
-      email: new FormControl('', [
-        Validators.email,
-        Validators.required,
-        MyValidators.noSpaces,
-      ]),
+      email: new FormControl('', [Validators.email, Validators.required]),
       password: new FormControl('', [
         Validators.minLength(8),
         Validators.required,
@@ -54,6 +50,7 @@ export class AppComponent implements OnInit {
       console.log('Form', this.form);
       const formData = { ...this.form.value };
       console.log(formData);
+      this.form.reset();
     }
   }
 }
