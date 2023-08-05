@@ -20,7 +20,7 @@
             >Не используйте пробелы</small
           >
           <small *ngIf="form.get('name')?.errors?.['maxlength']"
-            >Максимально количество символов -
+            >Максимальное количество символов -
             {{form.get('name')?.errors?.['maxlength'].requiredLength}}<br />
             Сейчас введено -
             {{form.get('name')?.errors?.['maxlength'].actualLength}}</small
@@ -158,7 +158,8 @@
   </p>
 
   <div *ngIf="success; else regForm">
-    <p class="success">Регистрация прошла успешно!</p>
+    <p class="success">Регистрация прошла успешно.</p>
+
     <app-login-form></app-login-form>
   </div>
 </div>

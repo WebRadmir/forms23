@@ -1,3 +1,14 @@
+@keyframes hideAnimation {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: visible;
+  }
+}
+
 p {
   &.error {
     color: red;
@@ -5,6 +16,7 @@ p {
 
   &.success {
     color: green;
+    animation: hideAnimation 3s linear forwards;
   }
 }
 

@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MyValidators } from 'src/app/my.validators';
 import { UsersAuthDBService } from 'src/app/services/users-auth-db.service';
 
@@ -37,7 +32,7 @@ export class LoginFormComponent implements OnInit {
 
   submit() {
     if (this.form.valid) {
-      this.form.reset();
+      this.success = true;
     }
   }
 }

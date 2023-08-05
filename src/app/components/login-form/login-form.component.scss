@@ -1,3 +1,21 @@
+@keyframes hideAnimation {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: visible;
+  }
+}
+
+p {
+  &.success {
+    color: green;
+    animation: hideAnimation 3s linear forwards;
+  }
+}
+
 input {
   &.ng-invalid.ng-touched {
     border: 1px solid red;
