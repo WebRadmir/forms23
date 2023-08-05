@@ -66,6 +66,9 @@
           <small *ngIf="form.get('email')?.errors?.['email']"
             >Введите корректный email</small
           >
+          <small *ngIf="form.get('email')?.errors?.['userNotFound']"
+            >Пользователь с таким email уже существует</small
+          >
         </div>
       </div>
 
@@ -154,7 +157,8 @@
     <small>Ошибка {{ error }}</small>
   </p>
 
-  <p *ngIf="success; else regForm" class="success">
-    Регистрация прошла успешно!
-  </p>
+  <div *ngIf="success; else regForm">
+    <p class="success">Регистрация прошла успешно!</p>
+    <app-login-form></app-login-form>
+  </div>
 </div>

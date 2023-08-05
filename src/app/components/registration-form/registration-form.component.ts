@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MyValidators } from 'src/app/my.validators';
 import { catchError, tap } from 'rxjs';
+import { UsersAuthDBService } from 'src/app/services/users-auth-db.service';
 
 export interface Person {
   name: string;
@@ -23,7 +24,8 @@ export class RegistrationFormComponent implements OnInit {
   form!: FormGroup;
   error = '';
   success = false;
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient, private usersDB: UsersAuthDBService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -39,10 +41,11 @@ export class RegistrationFormComponent implements OnInit {
         Validators.pattern(/^[a-zA-Zа-яА-Я]+$/),
         MyValidators.noSpaces,
       ]),
-      email: new FormControl('web@radmir.ru', [
-        Validators.email,
-        Validators.required,
-      ]),
+      email: new FormControl('web@radmir.ru', {
+        validators: [Validators.email, Validators.required],
+        asyncValidators: [MyValidators.verifyUserInDB(this.usersDB, true)],
+        updateOn: 'blur',
+      }),
       password: new FormControl('Aa12!@34', [
         Validators.minLength(8),
         Validators.required,

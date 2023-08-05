@@ -1,11 +1,33 @@
 import {
   AbstractControl,
-  ValidatorFn,
-  ValidationErrors,
+  AsyncValidatorFn,
   FormControl,
+  ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
+import { UsersAuthDBService } from './services/users-auth-db.service';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 export class MyValidators {
+  static verifyUserInDB(
+    usersDB: UsersAuthDBService,
+    inversion?: boolean
+  ): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return usersDB.getEmails().pipe(
+        map((userEmails) => {
+          const hasUser = userEmails.includes(control.value.toLowerCase());
+          if (inversion ? hasUser : !hasUser) {
+            return { userNotFound: true };
+          } else {
+            return null;
+          }
+        })
+      );
+    };
+  }
+
   static confirmPassword(passwordControlName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const passwordControl = control.parent?.get(passwordControlName);

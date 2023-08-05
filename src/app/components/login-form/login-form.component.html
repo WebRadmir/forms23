@@ -1,0 +1,40 @@
+<form class="card" [formGroup]="form" (ngSubmit)="submit()">
+  <h1>Авторизация</h1>
+
+  <div class="form-control">
+    <label>Email</label>
+    <input type="text" placeholder="Email" formControlName="email" />
+    <div
+      *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+      class="validation"
+    >
+      <small *ngIf="form.get('email')?.errors?.['required']"
+        >Введите email</small
+      >
+      <small *ngIf="form.get('email')?.errors?.['email']"
+        >Введите корректный email</small
+      >
+      <small *ngIf="form.get('email')?.errors?.['hasSpaces']"
+        >В адресе содержатся пробелы</small
+      >
+      <small *ngIf="form.get('email')?.errors?.['userNotFound']"
+        >Пользователь с таким email не зарегистрирован</small
+      >
+    </div>
+  </div>
+
+  <div class="form-control">
+    <label>Пароль</label>
+    <input type="password" placeholder="Пароль" formControlName="password" />
+    <div
+      *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+      class="validation"
+    >
+      <small *ngIf="form.get('password')?.errors?.['required']"
+        >Введите пароль</small
+      >
+    </div>
+  </div>
+
+  <button class="btn" type="submit">Авторизоваться</button>
+</form>
