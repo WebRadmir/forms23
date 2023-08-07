@@ -1,0 +1,105 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="userId">
+    <th mat-header-cell *matHeaderCellDef>userId</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="!element.editing; else editMode">
+        {{ element.userId }}
+      </ng-container>
+      <ng-template #editMode>
+        <input
+          type="number"
+          [(ngModel)]="element.userId"
+          (blur)="cancelEditing(element)"
+        />
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Title</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="!element.editing; else editMode">
+        {{ element.title | titlecase }}
+      </ng-container>
+      <ng-template #editMode>
+        <input
+          type="text"
+          [(ngModel)]="element.title"
+          (blur)="cancelEditing(element)"
+        />
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="body">
+    <th mat-header-cell *matHeaderCellDef>Body</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="!element.editing; else editMode">
+        {{ element.body | titlecase }}
+      </ng-container>
+      <ng-template #editMode>
+        <input
+          type="text"
+          [(ngModel)]="element.body"
+          (blur)="cancelEditing(element)"
+        />
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="!element.editing">
+        <button
+          mat-icon-button
+          color="warn"
+          aria-label="Delete post"
+          (click)="openDialog('500ms', '300ms', element.id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Edit post"
+          (click)="editPost(element)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="element.editing">
+        <button
+          mat-icon-button
+          color="accent"
+          aria-label="Save changes"
+          (click)="saveChanges(element)"
+        >
+          <mat-icon>save</mat-icon>
+        </button>
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<mat-paginator
+  (page)="handlePageEvent($event)"
+  [length]="length"
+  [pageSize]="pageSize"
+  [showFirstLastButtons]="showFirstLastButtons"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageIndex]="pageIndex"
+  aria-label="Select page"
+>
+</mat-paginator>
+
+<app-create-post></app-create-post>

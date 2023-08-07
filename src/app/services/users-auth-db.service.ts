@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
-import { User } from '../models/userDB';
+import { Observable, map } from 'rxjs';
+import { IUser } from '../models/userDB';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class UsersAuthDBService {
 
   getEmails(): Observable<string[]> {
     return this.http
-      .get<User[]>(this.usersUrl)
+      .get<IUser[]>(this.usersUrl)
       .pipe(map((users) => users.map((user) => user.email.toLowerCase())));
   }
 }

@@ -1,0 +1,42 @@
+<h1
+  mat-dialog-title
+  class="mat-mdc-dialog-title mdc-dialog__title"
+  id="mat-mdc-dialog-title-1"
+>
+  Внимание!
+</h1>
+<div mat-dialog-content class="mat-mdc-dialog-content mdc-dialog__content">
+  Удалить эту запись?
+</div>
+<div mat-dialog-actions class="mat-mdc-dialog-actions mdc-dialog__actions">
+  <button
+    mat-button=""
+    (click)="onCancelClick()"
+    mat-dialog-close=""
+    mat-ripple-loader-class-name="mat-mdc-button-ripple"
+    class="mdc-button mat-mdc-button mat-unthemed mat-mdc-button-base"
+    type="button"
+  >
+    <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span
+    ><span class="mdc-button__label">Нет</span
+    ><span class="mat-mdc-focus-indicator"></span
+    ><span class="mat-mdc-button-touch-target"></span
+    ><span class="mat-ripple mat-mdc-button-ripple"></span>
+  </button>
+
+  <button
+    mat-button=""
+    (click)="onConfirmClick()"
+    mat-dialog-close=""
+    cdkfocusinitial=""
+    mat-ripple-loader-class-name="mat-mdc-button-ripple"
+    class="mdc-button mat-mdc-button mat-unthemed mat-mdc-button-base"
+    type="button"
+  >
+    <span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span
+    ><span class="mdc-button__label">Да</span
+    ><span class="mat-mdc-focus-indicator"></span
+    ><span class="mat-mdc-button-touch-target"></span
+    ><span class="mat-ripple mat-mdc-button-ripple"></span>
+  </button>
+</div>

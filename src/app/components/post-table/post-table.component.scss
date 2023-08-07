@@ -1,0 +1,12 @@
+table {
+  width: 100%;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  --mdc-icon-button-state-layer-size: 35px;
+  padding: 5px;
+}
+
+.mat-column-actions {
+  white-space: nowrap;
+}
