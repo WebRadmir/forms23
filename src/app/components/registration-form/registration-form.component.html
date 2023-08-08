@@ -1,4 +1,4 @@
-<div class="container form-container">
+<div class="container">
   <ng-template #regForm>
     <form class="card" [formGroup]="form" (ngSubmit)="submit()">
       <div class="header">
@@ -127,10 +127,6 @@
           formControlName="birthday"
           [matDatepicker]="picker"
         />
-        <mat-hint
-          >Выберите или введите в формате день.месяц.год<br />
-          ДД.ММ.ГГГГ</mat-hint
-        >
 
         <mat-datepicker-toggle
           matIconSuffix
@@ -141,6 +137,16 @@
           >Зайдите когда вам исполнится 18 ;)</mat-error
         >
       </mat-form-field>
+
+      <mat-hint>
+        <ng-container *ngIf="error">
+          <p class="error">
+            Ошибка запроса. Обратитесь в поддержку
+            <a href="mailto:info@23devs.com">info@23devs.com</a><br />
+            <small>Ошибка {{ error }}</small>
+          </p>
+        </ng-container>
+      </mat-hint>
 
       <button
         mat-raised-button
@@ -153,21 +159,9 @@
       </button>
     </form>
   </ng-template>
-  <ng-container *ngIf="error">
-    <p class="error">
-      Ошибка запроса. Обратитесь в поддержку
-      <a href="mailto:info@23devs.com">info@23devs.com</a><br />
-      <small>Ошибка {{ error }}</small>
-    </p>
-  </ng-container>
 
   <ng-container *ngIf="success; else regForm">
-    <p class="success">Регистрация прошла успешно.</p>
-    <mat-card>
-      <mat-card-content>
-        <p class="success">Регистрация прошла успешно.</p>
-        <app-login-form></app-login-form>
-      </mat-card-content>
-    </mat-card>
+    <div class="success slide-in-and-hide">Регистрация прошла успешно.</div>
+    <app-login-form></app-login-form>
   </ng-container>
 </div>

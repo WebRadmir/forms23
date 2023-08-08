@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { map, take, tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { GetPostsService } from 'src/app/services/get-posts.service';
 import { IPost } from 'src/app/models/post';
 import { PageEvent } from '@angular/material/paginator';
@@ -24,6 +24,7 @@ export class PostTableComponent implements OnInit {
   pageSizeOptions = [10, 25, 50];
   pageSize = this.pageSizeOptions[0];
   showFirstLastButtons = true;
+  showForm = false;
 
   constructor(
     private getPosts: GetPostsService,

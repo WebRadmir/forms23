@@ -17,14 +17,14 @@ export class LoginFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      email: new FormControl('', {
+      email: new FormControl('Shanna@melissa.tv', {
         validators: [
           Validators.email,
           Validators.required,
           MyValidators.noSpaces,
         ],
         asyncValidators: [MyValidators.verifyUserInDB(this.usersDB)],
-        updateOn: 'submit',
+        updateOn: 'change',
       }),
       password: new FormControl('', [Validators.required]),
     });

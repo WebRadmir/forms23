@@ -17,10 +17,10 @@ import {
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
+    dateInput: 'DD.MM.YYYY',
   },
   display: {
-    dateInput: 'DD/MM/YYYY', // this is how your date will get displayed on the Input
+    dateInput: 'DD.MM.YYYY',
     monthYearLabel: 'MMMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -62,8 +62,11 @@ export class RegistrationFormComponent implements OnInit {
     private dateAdapter: DateAdapter<Date>
   ) {
     const currentYear = new Date().getFullYear();
-
-    this.maxDate = new Date(currentYear - 18, 0, 1);
+    this.maxDate = new Date(
+      currentYear - 18,
+      new Date().getMonth(),
+      new Date().getDate()
+    );
     this.dateAdapter.setLocale('ru-RU');
   }
 
@@ -127,7 +130,6 @@ export class RegistrationFormComponent implements OnInit {
           })
         )
         .subscribe();
-      this.form.reset();
     }
   }
 }
