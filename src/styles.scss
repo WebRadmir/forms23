@@ -67,7 +67,7 @@ img {
 
   label {
     display: block;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 1rem;
     margin-bottom: 0.5rem;
   }
@@ -102,5 +102,16 @@ hr {
   margin: 0.5rem 0;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-mdc-form-field-hint-wrapper,
+.mat-mdc-form-field-error-wrapper {
+  position: inherit !important;
+}
