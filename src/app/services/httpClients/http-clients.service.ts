@@ -13,9 +13,6 @@ import { IPerson, IPost, IUser } from './http-clients.types';
   providedIn: 'root',
 })
 export class HttpClientsService {
-  private postsUrl = 'https://jsonplaceholder.typicode.com/posts';
-  private usersUrl = 'https://jsonplaceholder.typicode.com/users';
-
   private totalCountHeader: string | null = null;
   private httpHeaders: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json; charset=UTF-8',
@@ -35,14 +32,14 @@ export class HttpClientsService {
 
   public getEmails(): Observable<string[]> {
     return this.http
-      .get<IUser[]>(this.usersUrl, {
+      .get<IUser[]>('/api/v1/users', {
         headers: this.httpHeadersForGet,
       })
       .pipe(map((users) => users.map((user) => user.email.toLowerCase())));
   }
 
   public postPerson(user: IPerson): Observable<IPerson> {
-    return this.http.post<IPerson>(this.usersUrl, user, {
+    return this.http.post<IPerson>('/api/v1/users', user, {
       headers: this.httpHeaders,
     });
   }
@@ -55,7 +52,7 @@ export class HttpClientsService {
       .set('_page', payload.page)
       .set('_limit', payload.limit);
     return this.http
-      .get<IPost[]>(this.postsUrl, {
+      .get<IPost[]>('/api/v1/posts', {
         headers: this.httpHeadersForGet,
         params: params,
         observe: 'response',
@@ -71,20 +68,18 @@ export class HttpClientsService {
   }
 
   public createPost(postObj: IPost): Observable<IPost> {
-    return this.http.post<IPost>(this.postsUrl, postObj, {
+    return this.http.post<IPost>('/api/v1/posts', postObj, {
       headers: this.httpHeaders,
     });
   }
 
   public deletePost(id: number): Observable<void> {
-    return this.http.delete<void>(
-      `https://jsonplaceholder.typicode.com/posts/${id}`
-    );
+    return this.http.delete<void>(`/api/v1/posts/${id}`);
   }
 
   public saveChangeInPost(element: IPost): Observable<IPost> {
     return this.http.patch<IPost>(
-      `https://jsonplaceholder.typicode.com/posts/${element.id}`,
+      `/api/v1/posts/${element.id}`,
       {
         title: element.title,
         userId: element.userId,
