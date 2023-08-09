@@ -11,7 +11,7 @@ import { MyValidators } from 'src/app/my.validators';
 })
 export class LoginFormComponent {
   public form: FormGroup = new FormGroup({
-    email: new FormControl('Shanna@melissa.tv', {
+    email: new FormControl('', {
       validators: [
         Validators.email,
         Validators.required,

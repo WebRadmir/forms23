@@ -43,24 +43,24 @@ export const MY_FORMATS = {
 })
 export class RegistrationFormComponent implements OnInit {
   public form: FormGroup = new FormGroup({
-    name: new FormControl('Radmir', [
+    name: new FormControl('', [
       Validators.maxLength(23),
       Validators.required,
       Validators.pattern(/^[a-zA-Zа-яА-Я-]+$/),
       MyValidators.noSpaces,
     ]),
-    surname: new FormControl('Yarmukhametov', [
+    surname: new FormControl('', [
       Validators.maxLength(23),
       Validators.required,
       Validators.pattern(/^[a-zA-Zа-яА-Я-]+$/),
       MyValidators.noSpaces,
     ]),
-    email: new FormControl('web@radmir.ru', {
+    email: new FormControl('', {
       validators: [Validators.email, Validators.required],
       asyncValidators: [MyValidators.verifyUserInDB(this.httpClient, true)],
       updateOn: 'blur',
     }),
-    password: new FormControl('Aa12!@34', [
+    password: new FormControl('', [
       Validators.minLength(8),
       Validators.required,
       Validators.pattern(
@@ -68,7 +68,7 @@ export class RegistrationFormComponent implements OnInit {
       ),
       MyValidators.noSpaces,
     ]),
-    confirmPassword: new FormControl('Aa12!@34', [
+    confirmPassword: new FormControl('', [
       Validators.required,
       MyValidators.confirmPassword('password'),
     ]),
