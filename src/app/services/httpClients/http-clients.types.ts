@@ -1,3 +1,21 @@
+export interface IPerson {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  birthday: string;
+  id?: number;
+}
+
+export interface IPost {
+  userId: number;
+  id?: number;
+  title: string;
+  body: string;
+  editing: boolean;
+}
+
 export interface IUser {
   id: number;
   name: string;

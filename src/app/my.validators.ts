@@ -5,13 +5,13 @@ import {
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
-import { UsersAuthDBService } from './services/users-auth-db.service';
+import { HttpClientsService } from './services/httpClients/http-clients.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export class MyValidators {
   static verifyUserInDB(
-    usersDB: UsersAuthDBService,
+    usersDB: HttpClientsService,
     inversion?: boolean
   ): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {

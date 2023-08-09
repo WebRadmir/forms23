@@ -1,59 +1,41 @@
 <div class="card">
-  <mat-form-field appearance="outline">
-    <mat-label>Заголовок</mat-label>
-    <input
-      matInput
-      required
-      [(ngModel)]="title"
-      maxlength="20"
-      #titleInput="ngModel"
-    />
-  </mat-form-field>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Заголовок</mat-label>
+      <input matInput required formControlName="title" maxlength="20" />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>UserID</mat-label>
-    <mat-select required [(ngModel)]="userID" #userIdInput="ngModel">
-      <mat-option value="1">1</mat-option>
-      <mat-option value="2">2</mat-option>
-      <mat-option value="3">3</mat-option>
-      <mat-option value="4">4</mat-option>
-      <mat-option value="5">5</mat-option>
-      <mat-option value="6">6</mat-option>
-      <mat-option value="7">7</mat-option>
-      <mat-option value="8">8</mat-option>
-      <mat-option value="9">9</mat-option>
-      <mat-option value="10">10</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Текст записи</mat-label>
-    <textarea
-      required
-      matInput
-      [(ngModel)]="body"
-      maxlength="50"
-      #bodyInput="ngModel"
-    ></textarea>
-  </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>UserID</mat-label>
+      <mat-select required formControlName="userID">
+        <mat-option *ngFor="let option of options" [value]="option">{{
+          option
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Текст записи</mat-label>
+      <textarea
+        required
+        matInput
+        formControlName="body"
+        maxlength="50"
+      ></textarea>
+    </mat-form-field>
 
-  <mat-error
-    *ngIf="
-      (titleInput.touched && titleInput.invalid) ||
-      (userIdInput.touched && userIdInput.invalid) ||
-      (bodyInput.touched && bodyInput.invalid)
-    "
-    class="error"
-  >
-    * - обязательно для заполнения
-  </mat-error>
+    <mat-error *ngIf="form.invalid && form.touched" class="error">
+      * - обязательно для заполнения
+    </mat-error>
+    <mat-error *ngIf="error"> Ошибка отправки: {{ error }} </mat-error>
 
-  <button
-    mat-raised-button
-    class="btn"
-    type="submit"
-    color="primary"
-    (click)="createPost()"
-  >
-    Создать
-  </button>
+    <button
+      mat-raised-button
+      class="btn"
+      type="submit"
+      color="primary"
+      (click)="createPost()"
+    >
+      Создать
+    </button>
+  </form>
 </div>

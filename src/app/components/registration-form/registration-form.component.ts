@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { MyValidators } from 'src/app/my.validators';
-import { catchError, tap } from 'rxjs';
-import { UsersAuthDBService } from 'src/app/services/users-auth-db.service';
-
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   MomentDateAdapter,
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
@@ -14,6 +10,11 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
+import { catchError, tap } from 'rxjs';
+
+import { MyValidators } from 'src/app/my.validators';
+import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
+import { IPerson } from 'src/app/services/httpClients/http-clients.types';
 
 export const MY_FORMATS = {
   parse: {
@@ -26,16 +27,6 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
-export interface Person {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  birthday: string;
-  id?: number;
-}
 
 @Component({
   selector: 'app-registration-form',
@@ -51,76 +42,76 @@ export interface Person {
   ],
 })
 export class RegistrationFormComponent implements OnInit {
-  form!: FormGroup;
-  error = '';
-  success = false;
-  maxDate: Date;
+  public form: FormGroup = new FormGroup({
+    name: new FormControl('Radmir', [
+      Validators.maxLength(23),
+      Validators.required,
+      Validators.pattern(/^[a-zA-Zа-яА-Я-]+$/),
+      MyValidators.noSpaces,
+    ]),
+    surname: new FormControl('Yarmukhametov', [
+      Validators.maxLength(23),
+      Validators.required,
+      Validators.pattern(/^[a-zA-Zа-яА-Я-]+$/),
+      MyValidators.noSpaces,
+    ]),
+    email: new FormControl('web@radmir.ru', {
+      validators: [Validators.email, Validators.required],
+      asyncValidators: [MyValidators.verifyUserInDB(this.httpClient, true)],
+      updateOn: 'blur',
+    }),
+    password: new FormControl('Aa12!@34', [
+      Validators.minLength(8),
+      Validators.required,
+      Validators.pattern(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]+$/
+      ),
+      MyValidators.noSpaces,
+    ]),
+    confirmPassword: new FormControl('Aa12!@34', [
+      Validators.required,
+      MyValidators.confirmPassword('password'),
+    ]),
+    birthday: new FormControl('', [
+      Validators.required,
+      MyValidators.ageVerification,
+    ]),
+  });
+  public error: string = '';
+  public success: boolean = false;
+  public maxDate: Date = new Date();
 
   constructor(
-    private http: HttpClient,
-    private usersDB: UsersAuthDBService,
+    private httpClient: HttpClientsService,
     private dateAdapter: DateAdapter<Date>
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.minAgeDatapicker(18);
+  }
+
+  public minAgeDatapicker(age: number): void {
     const currentYear = new Date().getFullYear();
     this.maxDate = new Date(
-      currentYear - 18,
+      currentYear - age,
       new Date().getMonth(),
       new Date().getDate()
     );
     this.dateAdapter.setLocale('ru-RU');
   }
 
-  ngOnInit(): void {
-    this.form = new FormGroup({
-      name: new FormControl('Radmir', [
-        Validators.maxLength(23),
-        Validators.required,
-        Validators.pattern(/^[a-zA-Zа-яА-Я-]+$/),
-        MyValidators.noSpaces,
-      ]),
-      surname: new FormControl('Yarmukhametov', [
-        Validators.maxLength(23),
-        Validators.required,
-        Validators.pattern(/^[a-zA-Zа-яА-Я-]+$/),
-        MyValidators.noSpaces,
-      ]),
-      email: new FormControl('web@radmir.ru', {
-        validators: [Validators.email, Validators.required],
-        asyncValidators: [MyValidators.verifyUserInDB(this.usersDB, true)],
-        updateOn: 'blur',
-      }),
-      password: new FormControl('Aa12!@34', [
-        Validators.minLength(8),
-        Validators.required,
-        Validators.pattern(
-          /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]+$/
-        ),
-        MyValidators.noSpaces,
-      ]),
-      confirmPassword: new FormControl('Aa12!@34', [
-        Validators.required,
-        MyValidators.confirmPassword('password'),
-      ]),
-      birthday: new FormControl('', [
-        Validators.required,
-        MyValidators.ageVerification,
-      ]),
-    });
-  }
-
-  submit() {
+  public submit(): void {
     if (this.form.valid) {
       const formattedDate = new Date(
         this.form.value.birthday
       ).toLocaleDateString('ru-RU');
 
-      const formData: Person = {
+      const formData: IPerson = {
         ...this.form.value,
         birthday: formattedDate,
       };
-      console.log(formData);
-      this.http
-        .post('https://jsonplaceholder.typicode.com/users', formData)
+      this.httpClient
+        .postPerson(formData)
         .pipe(
           tap(() => (this.success = true)),
           catchError((error: HttpErrorResponse) => {

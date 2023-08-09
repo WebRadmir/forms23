@@ -4,11 +4,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { take, tap } from 'rxjs';
-import { GetPostsService } from 'src/app/services/get-posts.service';
-import { IPost } from 'src/app/models/post';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { catchError, take, tap } from 'rxjs';
+
+import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
+import { IPost } from 'src/app/services/httpClients/http-clients.types';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-post-table',
@@ -17,25 +19,32 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostTableComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'userId', 'title', 'body', 'actions'];
-  dataSource: IPost[] = [];
-  length: number | null = null;
-  pageIndex = 0;
-  pageSizeOptions = [10, 25, 50];
-  pageSize = this.pageSizeOptions[0];
-  showFirstLastButtons = true;
-  showForm = false;
+  public displayedColumns: string[] = [
+    'id',
+    'userId',
+    'title',
+    'body',
+    'actions',
+  ];
+  public dataSource: IPost[] = [];
+  public length: number | null = null;
+  public pageIndex: number = 0;
+  public pageSizeOptions: number[] = [10, 25, 50];
+  public pageSize: number = this.pageSizeOptions[0];
+  public showFirstLastButtons: boolean = true;
+  public showForm: boolean = false;
 
   constructor(
-    private getPosts: GetPostsService,
-    private cdr: ChangeDetectorRef,
-    public dialog: MatDialog
+    private httpClient: HttpClientsService,
+    public dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {}
+
   ngOnInit(): void {
     this.loadPosts();
   }
 
-  openDialog(
+  public openDialog(
     enterAnimationDuration: string,
     exitAnimationDuration: string,
     id: number
@@ -52,8 +61,8 @@ export class PostTableComponent implements OnInit {
     });
   }
 
-  loadPosts() {
-    this.getPosts
+  public loadPosts(): void {
+    this.httpClient
       .getPosts({
         page: this.pageIndex + 1,
         limit: this.pageSize,
@@ -63,65 +72,57 @@ export class PostTableComponent implements OnInit {
         tap((res) => {
           res.map((post) => (post.editing = false));
           this.dataSource = res;
-          this.length = this.getPosts.getLength();
-          console.log(this.dataSource);
+          this.length = this.httpClient.getLength();
           this.cdr.detectChanges();
         })
       )
       .subscribe();
   }
 
-  addNewPost(newPost: IPost) {
+  public addNewPost(newPost: IPost): void {
     this.dataSource = [newPost, ...this.dataSource];
     this.length !== null ? this.length++ : null;
     this.cdr.detectChanges();
   }
 
-  openDeleteDialog(title: string): void {
+  public openDeleteDialog(title: string): void {
     this.dialog.open;
   }
 
-  deletePost(id: number) {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-      method: 'DELETE',
-    });
+  public deletePost(id: number): void {
+    this.httpClient
+      .deletePost(id)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.log('Ошибка при удалении:', error);
+          return [];
+        })
+      )
+      .subscribe();
+
     this.length !== null ? this.length-- : null;
 
     this.dataSource = this.dataSource.filter((post) => post.id !== id);
     this.cdr.detectChanges();
   }
 
-  editPost(element: IPost): void {
+  public editPost(element: IPost): void {
     element.editing = !element.editing;
   }
 
-  saveChanges(element: IPost) {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${element.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        title: element.title,
-        userId: element.userId,
-        body: element.body,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
+  public saveChanges(element: IPost): void {
+    this.httpClient.saveChangeInPost(element).subscribe();
     element.editing = false;
   }
 
-  cancelEditing(element: IPost): void {
+  public cancelEditing(element: IPost): void {
     element.editing = false;
   }
 
-  handlePageEvent(event: PageEvent): void {
+  public handlePageEvent(event: PageEvent): void {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.loadPosts();
-
-    console.log(event);
   }
 }
 
@@ -131,11 +132,12 @@ export class PostTableComponent implements OnInit {
 })
 export class DialogDelete {
   constructor(public dialogRef: MatDialogRef<DialogDelete>) {}
-  onConfirmClick(): void {
+
+  public onConfirmClick(): void {
     this.dialogRef.close('yes');
   }
 
-  onCancelClick(): void {
+  public onCancelClick(): void {
     this.dialogRef.close('no');
   }
 }
