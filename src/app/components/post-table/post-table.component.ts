@@ -3,10 +3,12 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  OnDestroy,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { catchError, take, tap } from 'rxjs';
+import { catchError, take, tap, interval, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
 import { IPost } from 'src/app/services/httpClients/http-clients.types';
@@ -18,7 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./post-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostTableComponent implements OnInit {
+export class PostTableComponent implements OnInit, OnDestroy {
   public displayedColumns: string[] = [
     'id',
     'userId',
@@ -33,6 +35,7 @@ export class PostTableComponent implements OnInit {
   public pageSize: number = this.pageSizeOptions[0];
   public showFirstLastButtons: boolean = true;
   public showForm: boolean = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private httpClient: HttpClientsService,
@@ -42,6 +45,14 @@ export class PostTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPosts();
+
+    interval(2 * 60 * 1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (document.visibilityState === 'visible') {
+          this.loadPosts();
+        }
+      });
   }
 
   public openDialog(
@@ -123,6 +134,11 @@ export class PostTableComponent implements OnInit {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.loadPosts();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
 
