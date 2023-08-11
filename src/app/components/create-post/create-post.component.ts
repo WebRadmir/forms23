@@ -1,12 +1,7 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { catchError, tap } from 'rxjs';
+import { Subject, catchError, takeUntil, tap } from 'rxjs';
 
 import { PostTableComponent } from '../post-table/post-table.component';
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
@@ -16,21 +11,20 @@ import { IPost } from 'src/app/services/httpClients/http-clients.types';
   selector: 'app-create-post',
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreatePostComponent implements OnInit {
+export class CreatePostComponent implements OnInit, OnDestroy {
   public form: FormGroup = new FormGroup({
     title: new FormControl('', Validators.required),
     userID: new FormControl('', Validators.required),
     body: new FormControl('', Validators.required),
   });
 
+  private destroy$ = new Subject<void>();
   public error = '';
   public options: number[] = [];
 
   constructor(
     private postTable: PostTableComponent,
-    private cdr: ChangeDetectorRef,
     private httpClient: HttpClientsService
   ) {}
 
@@ -46,7 +40,7 @@ export class CreatePostComponent implements OnInit {
 
   public createPost(): void {
     if (this.form.valid) {
-      const postObj: IPost = {
+      const newPostData: IPost = {
         title: this.form.value.title,
         body: this.form.value.body,
         userId: this.form.value.userID,
@@ -54,7 +48,7 @@ export class CreatePostComponent implements OnInit {
         active: false,
       };
       this.httpClient
-        .createPost(postObj)
+        .createPost(newPostData)
         .pipe(
           tap((newPost) => {
             this.postTable.addNewPost(newPost);
@@ -62,11 +56,16 @@ export class CreatePostComponent implements OnInit {
           catchError((error: HttpErrorResponse) => {
             console.log('Ошибка отправки:', error);
             this.error = error.name;
-            this.cdr.detectChanges();
             return [];
-          })
+          }),
+          takeUntil(this.destroy$)
         )
         .subscribe();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

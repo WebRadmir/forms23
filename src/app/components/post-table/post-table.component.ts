@@ -44,7 +44,6 @@ export class PostTableComponent implements OnInit, OnDestroy {
     const isHeaderCell = clickedElement.classList.contains(
       'mat-mdc-header-cell'
     );
-    console.log(!clickedElement.closest('.mat-elevation-z8'));
     if (
       !clickedElement.closest('.mat-elevation-z8') &&
       !clickedElement.closest('.edit-button')
@@ -102,7 +101,7 @@ export class PostTableComponent implements OnInit, OnDestroy {
         page: this.pageIndex + 1,
         limit: this.pageSize,
       })
-      .pipe(take(1))
+      .pipe(take(1), takeUntil(this.destroy$))
       .pipe(
         tap((res) => {
           res.map((post) => (post.editing = false));
@@ -127,7 +126,8 @@ export class PostTableComponent implements OnInit, OnDestroy {
         catchError((error: HttpErrorResponse) => {
           console.log('Ошибка при удалении:', error);
           return [];
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe();
 
@@ -141,7 +141,10 @@ export class PostTableComponent implements OnInit, OnDestroy {
   }
 
   public saveChanges(element: IPost): void {
-    this.httpClient.saveChangeInPost(element).subscribe();
+    this.httpClient
+      .saveChangeInPost(element)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
     element.editing = false;
   }
 

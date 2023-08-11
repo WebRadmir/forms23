@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
@@ -10,7 +10,7 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
-import { catchError, tap } from 'rxjs';
+import { Subject, catchError, takeUntil, tap } from 'rxjs';
 
 import { MyValidators } from 'src/app/my.validators';
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
@@ -41,7 +41,8 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class RegistrationFormComponent implements OnInit {
+export class RegistrationFormComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
   public form: FormGroup = new FormGroup({
     name: new FormControl('', [
       Validators.maxLength(23),
@@ -118,9 +119,15 @@ export class RegistrationFormComponent implements OnInit {
             console.log('Ошибка отправки:', error);
             this.error = error.name;
             return [];
-          })
+          }),
+          takeUntil(this.destroy$)
         )
         .subscribe();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
