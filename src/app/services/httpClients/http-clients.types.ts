@@ -14,6 +14,7 @@ export interface IPost {
   title: string;
   body: string;
   editing: boolean;
+  active: boolean;
 }
 
 export interface IUser {

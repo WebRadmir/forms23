@@ -10,3 +10,16 @@ table {
 .mat-column-actions {
   white-space: nowrap;
 }
+
+.mat-mdc-cell.mat-column-userId,
+.mat-mdc-cell.mat-column-title,
+.mat-mdc-cell.mat-column-body {
+  flex: 1;
+}
+
+.mat-mdc-cell.mat-column-userId input,
+.mat-mdc-cell.mat-column-title input,
+.mat-mdc-cell.mat-column-body textarea {
+  width: 100%;
+  box-sizing: border-box;
+}

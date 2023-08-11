@@ -11,11 +11,7 @@
         {{ element.userId }}
       </ng-container>
       <ng-template #editMode>
-        <input
-          type="number"
-          [(ngModel)]="element.userId"
-          (blur)="cancelEditing(element)"
-        />
+        <input type="number" [(ngModel)]="element.userId" />
       </ng-template>
     </td>
   </ng-container>
@@ -27,11 +23,7 @@
         {{ element.title | titlecase }}
       </ng-container>
       <ng-template #editMode>
-        <input
-          type="text"
-          [(ngModel)]="element.title"
-          (blur)="cancelEditing(element)"
-        />
+        <input type="text" [(ngModel)]="element.title" />
       </ng-template>
     </td>
   </ng-container>
@@ -43,11 +35,7 @@
         {{ element.body | titlecase }}
       </ng-container>
       <ng-template #editMode>
-        <input
-          type="text"
-          [(ngModel)]="element.body"
-          (blur)="cancelEditing(element)"
-        />
+        <textarea rows="3" [(ngModel)]="element.body"></textarea>
       </ng-template>
     </td>
   </ng-container>
@@ -67,9 +55,10 @@
 
         <button
           mat-icon-button
+          class="edit-button"
           color="primary"
           aria-label="Edit post"
-          (click)="editPost(element)"
+          (click)="toggleEditing(element)"
         >
           <mat-icon>edit</mat-icon>
         </button>
@@ -88,7 +77,12 @@
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    (click)="setActiveRow(row)"
+    [class.active]="row.active"
+  ></tr>
 </table>
 
 <mat-paginator
@@ -102,11 +96,13 @@
 >
 </mat-paginator>
 
-<button mat-flat-button color="primary" (click)="showForm = !showForm">
-  <mat-icon>add</mat-icon>
-  {{ showForm ? "Скрыть форму" : "Добавить запись" }}
-</button>
+<ng-container class="addPost">
+  <button mat-flat-button color="primary" (click)="showForm = !showForm">
+    <mat-icon>add</mat-icon>
+    {{ showForm ? "Скрыть форму" : "Добавить запись" }}
+  </button>
 
-<div *ngIf="showForm">
-  <app-create-post></app-create-post>
-</div>
+  <div *ngIf="showForm">
+    <app-create-post></app-create-post>
+  </div>
+</ng-container>

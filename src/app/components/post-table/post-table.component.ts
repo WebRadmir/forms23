@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   OnDestroy,
+  HostListener,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -37,11 +38,34 @@ export class PostTableComponent implements OnInit, OnDestroy {
   public showForm: boolean = false;
   private destroy$ = new Subject<void>();
 
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event): void {
+    const clickedElement = event.target as HTMLElement;
+    const isHeaderCell = clickedElement.classList.contains(
+      'mat-mdc-header-cell'
+    );
+    console.log(!clickedElement.closest('.mat-elevation-z8'));
+    if (
+      !clickedElement.closest('.mat-elevation-z8') &&
+      !clickedElement.closest('.edit-button')
+    ) {
+      this.cancelEditingForAll();
+    } else if (isHeaderCell) {
+      this.cancelEditingForAll();
+    }
+  }
+
   constructor(
     private httpClient: HttpClientsService,
     public dialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) {}
+
+  public cancelEditingForAll(): void {
+    this.dataSource.forEach((item) => {
+      item.editing = false;
+    });
+  }
 
   ngOnInit(): void {
     this.loadPosts();
@@ -96,10 +120,6 @@ export class PostTableComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  public openDeleteDialog(title: string): void {
-    this.dialog.open;
-  }
-
   public deletePost(id: number): void {
     this.httpClient
       .deletePost(id)
@@ -112,12 +132,11 @@ export class PostTableComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.length !== null ? this.length-- : null;
-
     this.dataSource = this.dataSource.filter((post) => post.id !== id);
     this.cdr.detectChanges();
   }
 
-  public editPost(element: IPost): void {
+  public toggleEditing(element: IPost): void {
     element.editing = !element.editing;
   }
 
@@ -126,8 +145,14 @@ export class PostTableComponent implements OnInit, OnDestroy {
     element.editing = false;
   }
 
-  public cancelEditing(element: IPost): void {
-    element.editing = false;
+  public setActiveRow(row: IPost): void {
+    row.active = true;
+    this.dataSource.forEach((item) => {
+      if (item !== row) {
+        item.active = false;
+        item.editing = false;
+      }
+    });
   }
 
   public handlePageEvent(event: PageEvent): void {

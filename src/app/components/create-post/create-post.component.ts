@@ -51,6 +51,7 @@ export class CreatePostComponent implements OnInit {
         body: this.form.value.body,
         userId: this.form.value.userID,
         editing: false,
+        active: false,
       };
       this.httpClient
         .createPost(postObj)
