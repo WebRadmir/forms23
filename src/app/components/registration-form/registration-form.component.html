@@ -1,167 +1,160 @@
 <div class="container">
-  <ng-template #regForm>
-    <form class="card" [formGroup]="form" (ngSubmit)="submit()">
-      <div class="header">
-        <img
-          src="https://img.hhcdn.ru/employer-logo/6163318.png"
-          alt="23devs"
-          class="logo"
-        />
-        <h1>Форма регистрации (18+)</h1>
-      </div>
+  <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="header">
+      <img
+        src="https://img.hhcdn.ru/employer-logo/6163318.png"
+        alt="23devs"
+        class="logo"
+      />
+      <h1>Форма регистрации (18+)</h1>
+    </div>
 
-      <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Имя</mat-label>
-        <input matInput placeholder="Имя" formControlName="name" />
-        <mat-error *ngIf="form.get('name')?.hasError('required')"
-          >Введите имя</mat-error
-        >
-        <mat-error *ngIf="form.get('name')?.hasError('pattern')"
-          >Только русский и английский алфавит</mat-error
-        >
-        <mat-error *ngIf="form.get('name')?.hasError('hasSpaces')"
-          >Не используйте пробелы</mat-error
-        >
-        <mat-error *ngIf="form.get('name')?.hasError('maxlength')"
-          >Максимальное количество символов -
-          {{ form.get("name")?.getError("maxlength")?.requiredLength
-          }}<br />Сейчас введено -
-          {{ form.get("name")?.getError("maxlength")?.actualLength }}</mat-error
-        >
-      </mat-form-field>
-
-      <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Фамилия</mat-label>
-        <input matInput placeholder="Фамилия" formControlName="surname" />
-        <mat-error *ngIf="form.get('surname')?.hasError('required')"
-          >Введите фамилию</mat-error
-        >
-        <mat-error *ngIf="form.get('surname')?.hasError('pattern')"
-          >Только русский и английский алфавит</mat-error
-        >
-        <mat-error *ngIf="form.get('surname')?.hasError('hasSpaces')"
-          >Не используйте пробелы</mat-error
-        >
-        <mat-error *ngIf="form.get('surname')?.hasError('maxlength')"
-          >Максимальное количество символов -
-          {{ form.get("surname")?.getError("maxlength")?.requiredLength
-          }}<br />Сейчас введено -
-          {{
-            form.get("surname")?.getError("maxlength")?.actualLength
-          }}</mat-error
-        >
-      </mat-form-field>
-
-      <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" formControlName="email" />
-        <mat-error *ngIf="form.get('email')?.hasError('required')"
-          >Введите email</mat-error
-        >
-        <mat-error *ngIf="form.get('email')?.hasError('email')"
-          >Введите корректный email</mat-error
-        >
-        <mat-error *ngIf="form.get('email')?.hasError('userNotFound')"
-          >Пользователь с таким email уже существует</mat-error
-        >
-        <mat-error *ngIf="form.get('email')?.hasError('maxlength')"
-          >Максимальное количество символов -
-          {{ form.get("email")?.getError("maxlength")?.requiredLength
-          }}<br />Сейчас введено -
-          {{
-            form.get("email")?.getError("maxlength")?.actualLength
-          }}</mat-error
-        >
-      </mat-form-field>
-
-      <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Пароль</mat-label>
-        <input
-          matInput
-          type="password"
-          placeholder="Пароль"
-          formControlName="password"
-        />
-        <mat-error *ngIf="form.get('password')?.hasError('required')"
-          >Введите пароль</mat-error
-        >
-        <mat-error *ngIf="form.get('password')?.hasError('hasSpaces')"
-          >Не используйте пробелы</mat-error
-        >
-        <mat-error *ngIf="form.get('password')?.hasError('pattern')"
-          >Пароль должен содержать: строчную и заглавную буквы, цифру,
-          символ.<br />Допустимы буквы английского алфавита и символы
-          !@#$%^&*()_+</mat-error
-        >
-        <mat-error *ngIf="form.get('password')?.hasError('minlength')"
-          >Минимальное количество символов -
-          {{ form.get("password")?.getError("minlength")?.requiredLength
-          }}<br />Сейчас введено -
-          {{
-            form.get("password")?.getError("minlength")?.actualLength
-          }}</mat-error
-        >
-      </mat-form-field>
-      <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Подтверждение пароля</mat-label>
-        <input
-          matInput
-          type="password"
-          placeholder="Подтверждение пароля"
-          formControlName="confirmPassword"
-        />
-        <mat-error *ngIf="form.get('password')?.hasError('required')"
-          >Введите пароль</mat-error
-        >
-        <mat-error *ngIf="form.get('password')?.hasError('notConfirm')"
-          >Пароли не совпадают</mat-error
-        >
-      </mat-form-field>
-
-      <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Дата рождения</mat-label>
-        <input
-          matInput
-          [max]="maxDate"
-          placeholder="Дата рождения"
-          formControlName="birthday"
-          [matDatepicker]="picker"
-        />
-
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-error *ngIf="form.get('birthday')?.hasError('underage')"
-          >Для лиц старше 18 лет</mat-error
-        >
-      </mat-form-field>
-
-      <mat-hint>
-        <ng-container *ngIf="error">
-          <p class="error">
-            Ошибка запроса. Обратитесь в поддержку
-            <a href="mailto:info@23devs.com">info@23devs.com</a><br />
-            <small>Ошибка {{ error }}</small>
-          </p>
-        </ng-container>
-      </mat-hint>
-
-      <button
-        mat-raised-button
-        class="btn"
-        type="submit"
-        [disabled]="form.invalid"
-        color="primary"
+    <mat-form-field class="form-control" appearance="outline">
+      <mat-label>Имя</mat-label>
+      <input matInput placeholder="Имя" formControlName="name" />
+      <mat-error *ngIf="form.get('name')?.hasError('required')"
+        >Введите имя</mat-error
       >
-        Отправить
-      </button>
-    </form>
-  </ng-template>
+      <mat-error *ngIf="form.get('name')?.hasError('pattern')"
+        >Только русский и английский алфавит</mat-error
+      >
+      <mat-error *ngIf="form.get('name')?.hasError('hasSpaces')"
+        >Не используйте пробелы</mat-error
+      >
+      <mat-error *ngIf="form.get('name')?.hasError('maxlength')"
+        >Максимальное количество символов -
+        {{ form.get("name")?.getError("maxlength")?.requiredLength
+        }}<br />Сейчас введено -
+        {{ form.get("name")?.getError("maxlength")?.actualLength }}</mat-error
+      >
+    </mat-form-field>
 
-  <ng-container *ngIf="success; else regForm">
-    <div class="success slide-in-and-hide">Регистрация прошла успешно.</div>
-    <app-login-form></app-login-form>
-  </ng-container>
+    <mat-form-field class="form-control" appearance="outline">
+      <mat-label>Фамилия</mat-label>
+      <input matInput placeholder="Фамилия" formControlName="surname" />
+      <mat-error *ngIf="form.get('surname')?.hasError('required')"
+        >Введите фамилию</mat-error
+      >
+      <mat-error *ngIf="form.get('surname')?.hasError('pattern')"
+        >Только русский и английский алфавит</mat-error
+      >
+      <mat-error *ngIf="form.get('surname')?.hasError('hasSpaces')"
+        >Не используйте пробелы</mat-error
+      >
+      <mat-error *ngIf="form.get('surname')?.hasError('maxlength')"
+        >Максимальное количество символов -
+        {{ form.get("surname")?.getError("maxlength")?.requiredLength
+        }}<br />Сейчас введено -
+        {{
+          form.get("surname")?.getError("maxlength")?.actualLength
+        }}</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="form-control" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Email" formControlName="email" />
+      <mat-error *ngIf="form.get('email')?.hasError('required')"
+        >Введите email</mat-error
+      >
+      <mat-error *ngIf="form.get('email')?.hasError('email')"
+        >Введите корректный email</mat-error
+      >
+      <mat-error *ngIf="form.get('email')?.hasError('userNotFound')"
+        >Пользователь с таким email уже существует</mat-error
+      >
+      <mat-error *ngIf="form.get('email')?.hasError('maxlength')"
+        >Максимальное количество символов -
+        {{ form.get("email")?.getError("maxlength")?.requiredLength
+        }}<br />Сейчас введено -
+        {{ form.get("email")?.getError("maxlength")?.actualLength }}</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="form-control" appearance="outline">
+      <mat-label>Пароль</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="Пароль"
+        formControlName="password"
+      />
+      <mat-error *ngIf="form.get('password')?.hasError('required')"
+        >Введите пароль</mat-error
+      >
+      <mat-error *ngIf="form.get('password')?.hasError('hasSpaces')"
+        >Не используйте пробелы</mat-error
+      >
+      <mat-error *ngIf="form.get('password')?.hasError('pattern')"
+        >Пароль должен содержать: строчную и заглавную буквы, цифру, символ.<br />Допустимы
+        буквы английского алфавита и символы !@#$%^&*()_+</mat-error
+      >
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')"
+        >Минимальное количество символов -
+        {{ form.get("password")?.getError("minlength")?.requiredLength
+        }}<br />Сейчас введено -
+        {{
+          form.get("password")?.getError("minlength")?.actualLength
+        }}</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="form-control" appearance="outline">
+      <mat-label>Подтверждение пароля</mat-label>
+      <input
+        matInput
+        type="password"
+        placeholder="Подтверждение пароля"
+        formControlName="confirmPassword"
+      />
+      <mat-error *ngIf="form.get('password')?.hasError('required')"
+        >Введите пароль</mat-error
+      >
+      <mat-error *ngIf="form.get('password')?.hasError('notConfirm')"
+        >Пароли не совпадают</mat-error
+      >
+    </mat-form-field>
+
+    <mat-form-field class="form-control" appearance="outline">
+      <mat-label>Дата рождения</mat-label>
+      <input
+        matInput
+        [max]="maxDate"
+        placeholder="Дата рождения"
+        formControlName="birthday"
+        [matDatepicker]="picker"
+      />
+
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="form.get('birthday')?.hasError('underage')"
+        >Для лиц старше 18 лет</mat-error
+      >
+    </mat-form-field>
+
+    <mat-hint>
+      <ng-container *ngIf="error">
+        <p class="error">
+          Ошибка запроса. Обратитесь в поддержку
+          <a href="mailto:info@23devs.com">info@23devs.com</a><br />
+          <small>Ошибка {{ error }}</small>
+        </p>
+      </ng-container>
+    </mat-hint>
+
+    <button
+      mat-raised-button
+      class="btn"
+      type="submit"
+      [disabled]="form.invalid"
+      color="primary"
+    >
+      Отправить
+    </button>
+    <small class="yes-account"
+      ><a routerLink="/login">Есть аккаунт? Войдите</a></small
+    >
+  </form>
 </div>

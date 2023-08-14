@@ -23,6 +23,11 @@ import { RegistrationFormComponent } from './components/registration-form/regist
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { PostTableComponent } from './components/post-table/post-table.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
+import { TablePageComponent } from './pages/table-page/table-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +36,11 @@ import { CreatePostComponent } from './components/create-post/create-post.compon
     LoginFormComponent,
     PostTableComponent,
     CreatePostComponent,
+    HomePageComponent,
+    RegistrationPageComponent,
+    TablePageComponent,
+    LoginPageComponent,
+    NotFoundPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ import { Subject, catchError, takeUntil, tap } from 'rxjs';
 import { MyValidators } from 'src/app/my.validators';
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
 import { IPerson } from 'src/app/services/httpClients/http-clients.types';
+import { Router } from '@angular/router';
 
 export const MY_FORMATS = {
   parse: {
@@ -84,7 +85,8 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private httpClient: HttpClientsService,
-    private dateAdapter: DateAdapter<Date>
+    private dateAdapter: DateAdapter<Date>,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -114,7 +116,10 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       this.httpClient
         .postPerson(formData)
         .pipe(
-          tap(() => (this.success = true)),
+          tap(() => {
+            this.success = true;
+            this.router.navigate(['table-page']);
+          }),
           catchError((error: HttpErrorResponse) => {
             console.log('Ошибка отправки:', error);
             this.error = error.name;

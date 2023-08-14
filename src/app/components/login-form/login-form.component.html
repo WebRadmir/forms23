@@ -1,47 +1,44 @@
-<ng-template #loginForm
-  ><form class="card" [formGroup]="form" (ngSubmit)="submit()">
-    <div class="header">
-      <img
-        src="https://img.hhcdn.ru/employer-logo/6163318.png"
-        alt="23devs"
-        class="logo"
-      />
-      <h1>Авторизация</h1>
-    </div>
+<form class="card" [formGroup]="loginForm" (ngSubmit)="submit()">
+  <div class="header">
+    <img
+      src="https://img.hhcdn.ru/employer-logo/6163318.png"
+      alt="23devs"
+      class="logo"
+    />
+    <h1>Авторизация</h1>
+  </div>
 
-    <mat-form-field class="form-control" appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput placeholder="Email" formControlName="email" />
-      <mat-error *ngIf="form.get('email')?.hasError('required')"
-        >Введите email</mat-error
-      >
-      <mat-error *ngIf="form.get('email')?.hasError('email')"
-        >Введите корректный email</mat-error
-      >
-      <mat-error *ngIf="form.get('email')?.hasError('userNotFound')"
-        >Пользователь с таким email не зарегистрирован</mat-error
-      >
-    </mat-form-field>
+  <mat-form-field class="form-control" appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput placeholder="Email" formControlName="email" />
+    <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+      >Введите email</mat-error
+    >
+    <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
+      >Введите корректный email</mat-error
+    >
+    <mat-error *ngIf="loginForm.get('email')?.hasError('userNotFound')"
+      >Пользователь с таким email не зарегистрирован</mat-error
+    >
+  </mat-form-field>
 
-    <mat-form-field class="form-control" appearance="outline">
-      <mat-label>Пароль</mat-label>
-      <input
-        matInput
-        type="password"
-        placeholder="Пароль"
-        formControlName="password"
-      />
-      <mat-error *ngIf="form.get('password')?.hasError('required')"
-        >Введите пароль</mat-error
-      >
-    </mat-form-field>
+  <mat-form-field class="form-control" appearance="outline">
+    <mat-label>Пароль</mat-label>
+    <input
+      matInput
+      type="password"
+      placeholder="Пароль"
+      formControlName="password"
+    />
+    <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+      >Введите пароль</mat-error
+    >
+  </mat-form-field>
 
-    <button mat-raised-button class="btn" type="submit" color="primary">
-      Авторизоваться
-    </button>
-  </form></ng-template
->
-<ng-container *ngIf="success; else loginForm">
-  <div class="success slide-in-and-hide">Вы авторизованы.</div>
-  <app-post-table></app-post-table>
-</ng-container>
+  <button mat-raised-button class="btn" type="submit" color="primary">
+    Авторизоваться
+  </button>
+  <small class="no-account"
+    ><a routerLink="/registration">Нет аккаунта? Регистрация</a></small
+  >
+</form>

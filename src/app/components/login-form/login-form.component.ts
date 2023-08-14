@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
 import { MyValidators } from 'src/app/my.validators';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -10,7 +12,7 @@ import { MyValidators } from 'src/app/my.validators';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
-  public form: FormGroup = new FormGroup({
+  public loginForm: FormGroup = new FormGroup({
     email: new FormControl('', {
       validators: [
         Validators.email,
@@ -22,13 +24,19 @@ export class LoginFormComponent {
     }),
     password: new FormControl('', [Validators.required]),
   });
-  public success: boolean = false;
 
-  constructor(private httpClient: HttpClientsService) {}
+  constructor(
+    private httpClient: HttpClientsService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   public submit(): void {
-    if (this.form.valid) {
-      this.success = true;
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => this.router.navigate(['table-page']),
+        error: (err) => alert(err.message),
+      });
     }
   }
 }
