@@ -1,1 +1,7 @@
 <router-outlet></router-outlet>
+<ng-container *ngIf="authentication">
+  <button mat-flat-button color="accent" (click)="logout()" class="logout-btn">
+    <mat-icon>logout</mat-icon>
+    Выйти
+  </button>
+</ng-container>

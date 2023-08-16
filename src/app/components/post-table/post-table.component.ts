@@ -14,6 +14,7 @@ import { takeUntil } from 'rxjs/operators';
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
 import { IPost } from 'src/app/services/httpClients/http-clients.types';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-post-table',
@@ -57,6 +58,8 @@ export class PostTableComponent implements OnInit, OnDestroy {
   constructor(
     private httpClient: HttpClientsService,
     public dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -96,21 +99,28 @@ export class PostTableComponent implements OnInit, OnDestroy {
   }
 
   public loadPosts(): void {
-    this.httpClient
-      .getPosts({
-        page: this.pageIndex + 1,
-        limit: this.pageSize,
-      })
-      .pipe(take(1), takeUntil(this.destroy$))
-      .pipe(
-        tap((res) => {
-          res.map((post) => (post.editing = false));
-          this.dataSource = res;
-          this.length = this.httpClient.getLength();
-          this.cdr.detectChanges();
+    this.route.queryParams.subscribe((params) => {
+      this.pageIndex = params['_page'];
+      this.pageSize = params['_limit'];
+
+      this.httpClient
+        .getPosts({
+          page: +this.pageIndex + 1,
+          limit: +this.pageSize,
         })
-      )
-      .subscribe();
+        .pipe(take(1), takeUntil(this.destroy$))
+        .pipe(
+          tap((res) => {
+            console.log(this.pageSize);
+            console.log(this.pageIndex);
+            res.map((post) => (post.editing = false));
+            this.dataSource = res;
+            this.length = this.httpClient.getLength();
+            this.cdr.detectChanges();
+          })
+        )
+        .subscribe();
+    });
   }
 
   public addNewPost(newPost: IPost): void {
@@ -159,6 +169,12 @@ export class PostTableComponent implements OnInit, OnDestroy {
   }
 
   public handlePageEvent(event: PageEvent): void {
+    this.router.navigate(['table-page'], {
+      queryParams: {
+        _page: event.pageIndex,
+        _limit: event.pageSize,
+      },
+    });
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.loadPosts();

@@ -7,7 +7,7 @@ import { HttpClientsService } from '../httpClients/http-clients.service';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private httpClient: HttpClientsService) {}
+  constructor(private httpClient: HttpClientsService, private router: Router) {}
 
   public setToken(token: string): void {
     localStorage.setItem('token', token);
@@ -38,5 +38,13 @@ export class AuthService {
       return of(true);
     }
     return throwError(() => new Error('Неверный пароль (введите 123)'));
+  }
+
+  public logout() {
+    const confirmation = confirm('Вы хотите выйти?');
+    if (confirmation) {
+      this.router.navigate(['login']);
+      localStorage.removeItem('token');
+    }
   }
 }

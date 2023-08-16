@@ -16,6 +16,7 @@ import { MyValidators } from 'src/app/my.validators';
 import { HttpClientsService } from 'src/app/services/httpClients/http-clients.service';
 import { IPerson } from 'src/app/services/httpClients/http-clients.types';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -86,11 +87,15 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
   constructor(
     private httpClient: HttpClientsService,
     private dateAdapter: DateAdapter<Date>,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.minAgeDatapicker(18);
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['table-page']);
+    }
   }
 
   public minAgeDatapicker(age: number): void {
