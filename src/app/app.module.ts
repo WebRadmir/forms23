@@ -1,65 +1,36 @@
 import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatCardModule } from '@angular/material/card';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { SharedModule } from './shared/shared.module';
 
-import { RegistrationFormComponent } from './components/registration-form/registration-form.component';
-import { LoginFormComponent } from './components/login-form/login-form.component';
-import { PostTableComponent } from './components/post-table/post-table.component';
-import { CreatePostComponent } from './components/create-post/create-post.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { RegistrationPageComponent } from './pages/registration-page/registration-page.component';
-import { TablePageComponent } from './pages/table-page/table-page.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
+import { CreatePostModule } from './components/create-post/create-post.module';
+import { PostTableModule } from './components/post-table/post-table.module';
+import { RegistrationFormModule } from './components/registration-form/registration-form.module';
+import { LoginFormModule } from './components/login-form/login-form.module';
+import { LoginPageModule } from './pages/login-page/login-page.module';
+import { NotFoundPageModule } from './pages/not-found-page/not-found-page.module';
+import { RegistrationPageModule } from './pages/registration-page/registration-page.module';
+import { TablePageModule } from './pages/table-page/table-page.module';
+import { HttpClientsModule } from './services/httpClients/http-clients.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    RegistrationFormComponent,
-    LoginFormComponent,
-    PostTableComponent,
-    CreatePostComponent,
-    HomePageComponent,
-    RegistrationPageComponent,
-    TablePageComponent,
-    LoginPageComponent,
-    NotFoundPageComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
     BrowserAnimationsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSelectModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDialogModule,
-    MatCardModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    SharedModule,
+    LoginFormModule,
+    CreatePostModule,
+    PostTableModule,
+    RegistrationFormModule,
+    LoginPageModule,
+    NotFoundPageModule,
+    RegistrationPageModule,
+    TablePageModule,
+    HttpClientsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

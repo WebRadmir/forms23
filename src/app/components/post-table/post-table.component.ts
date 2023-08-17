@@ -111,8 +111,6 @@ export class PostTableComponent implements OnInit, OnDestroy {
         .pipe(take(1), takeUntil(this.destroy$))
         .pipe(
           tap((res) => {
-            console.log(this.pageSize);
-            console.log(this.pageIndex);
             res.map((post) => (post.editing = false));
             this.dataSource = res;
             this.length = this.httpClient.getLength();
