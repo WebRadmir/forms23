@@ -118,6 +118,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
         ...this.form.value,
         birthday: formattedDate,
       };
+
       this.httpClient
         .postPerson(formData)
         .pipe(

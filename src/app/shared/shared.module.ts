@@ -12,6 +12,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -33,6 +35,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
     MatNativeDateModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    MatTooltipModule,
   ],
   exports: [
     CommonModule,
@@ -50,6 +53,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
+    MatTooltipModule,
   ],
 })
 export class SharedModule {}

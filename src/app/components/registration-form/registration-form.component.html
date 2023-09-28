@@ -47,7 +47,11 @@
     </mat-form-field>
 
     <mat-form-field class="form-control" appearance="outline">
-      <mat-label>Email</mat-label>
+      <mat-label
+        #tooltip="matTooltip"
+        matTooltip="Список занятых адресов - jsonplaceholder.typicode.com/users"
+        >Email</mat-label
+      >
       <input matInput placeholder="Email" formControlName="email" />
       <mat-error *ngIf="form.get('email')?.hasError('required')"
         >Введите email</mat-error
@@ -148,7 +152,10 @@
     >
       Отправить
     </button>
-    <small class="yes-account"
+    <small class="tooltip"
+      ><a (click)="tooltip.toggle()">Подсказка по e-mail</a>
+    </small>
+    <small class="has-account"
       ><a routerLink="/login">Есть аккаунт? Войдите</a></small
     >
   </form>
